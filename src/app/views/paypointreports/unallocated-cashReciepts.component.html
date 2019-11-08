@@ -1,0 +1,147 @@
+<!-- Unallocated Cash Receipts - Paypoint Report Receipts -->
+
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Unallocated Cash Receipts
+        </div>
+   
+        <div class="card-body">
+          
+          <form [formGroup] = "detailInput"  (ngSubmit)="detailReport()">
+
+            <div class="form-row">
+              <div class="col">
+                         
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label">From Date <span class="text-danger">*</span></label>
+                  <div  class = "col-md-4">
+                    <input class="form-control" id="date-input" type="date" 
+                    formControlName = "fromDate" name="date-input">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label">To Date <span class="text-danger">*</span></label>
+                  <div  class = "col-md-4">
+                    <input class="form-control" id="date-input" type="date" 
+                    formControlName = "to_Date" name="date-input">
+                  </div>
+                </div>      
+                
+                <div class="btn-toolbar">
+                  <div class="btn-group mr-2">
+                    <button type="submit" class="btn btn-md btn-primary "[disabled]="detailInput.untouched">Report</button>
+                  </div>
+                </div>
+                        
+            </div>
+
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report/Results Container -->
+  <div class="row" *ngIf="displayReport">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i>Unallocated Cash Receipts&nbsp;&nbsp;&nbsp;&nbsp; <!--<b>Paypoint Report Number:</b>{{reportNo}}-->
+              <span class="text float-right">{{ today | date : "dd-MMM-yyyy" }}</span>
+          </div>
+
+          <div class="card-body">
+            <div class="card-row">
+              <div class="col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    Period:&nbsp;{{ headerDetails.start_date | date : "dd-MMM-yyyy" | uppercase }}&nbsp;to&nbsp;{{ headerDetails.end_date | date : "dd-MMM-yyyy" | uppercase }}
+                  </div>
+
+                  <div class="card-body">
+                    <div class="card-row">
+                    <div class="pre-scrollable">
+                      <table class="table table-bordered table-striped table-sm">
+                        <thead>
+                          <tr>
+                            <th>Pay Mode</th>
+                            <th>Receipt No./Stament ID</th>
+                            <th>Bobi Receipt No.</th>
+                            <th>Period</th>
+                            <th>Paypoint ID</th>
+                            <th>Paypoint Name</th>
+                            <th>Branch</th>
+                            <th>Receipt Date</th>
+                            <th>No. Of Days</th>
+                            <th>Gross Amount</th>
+                            <th>Allocated Amount</th>
+                            <th>Receipt Amount</th>
+                            <th>Status</th>
+                            <th>Unallocated Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of unallocated_cash_receipts">
+                            <td>{{item.pay_mode}}</td>
+                            <td>{{item.receipt_no}}</td>
+                            <td>{{item.bobi_rec_no}}</td>
+                            <td>{{item.paypoint_due_date}}</td>
+                            <td>{{item.paypoint_id}}</td>
+                            <td>{{item.pay_point_name}}</td> 
+                            <td>{{item.branch}}</td> 
+                            <td>{{item.rcpt_date}}</td> <!-- is this appropriate column /? -->
+                            <td>{{item.no_of_days}}</td> 
+                            <td class="text-right">{{item.gross_amount | number : '.2-2' }}</td> 
+                            <td class="text-right">{{item.allocated_amount | number : '.2-2' }}</td> 
+                            <td class="text-right">{{item.receipt_amount | number : '.2-2' }}</td> 
+                            <td>{{item.status}}</td> 
+                            <td class="text-right">{{item.gross_amount - item.allocated_amount | number : '.2-2' }}</td> 
+                          </tr>
+
+                          <tr>
+                            <td colspan="9" class="text-center font-weight-bold">Totals</td>
+                            <td class="text-right font-weight-bold">{{totalGross | number : '.2-2' }}</td>
+                            <td class="text-right font-weight-bold">{{totalAllocated | number : '.2-2' }}</td>
+                            <td class="text-right font-weight-bold">{{totalReceipt | number : '.2-2' }}</td>
+                            <td></td>
+                            <td class="text-right font-weight-bold">{{totalUnallocated | number : '.2-2' }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    </div>
+                    </div>
+
+                    <br>
+                    <div class="card-row text-center btn-toolbar">
+                      <div class= "col-lg-12">
+                        <div class="btn-group mr-2">
+                          <button type="button" class="btn btn-block btn-primary" (click)="toggleDisplayReport()">Exit</button>
+                        </div>
+                      
+                        <div class="btn-group mr-2">
+                          <button type="button" class="btn btn-block btn-primary" (click)="print()">Print</button>
+                        </div>
+                      </div>
+                    </div>
+                     
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+              
+          </div>
+          <!--End Of tafole-->
+        
+        </div>
+
+      </div>
+</div>

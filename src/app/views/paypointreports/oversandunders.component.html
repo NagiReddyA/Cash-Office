@@ -1,0 +1,267 @@
+<!-- Collection - Application Detail -->
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Overs and Unders Report
+        </div>
+
+        <div class="card-body">
+
+          <form
+          [formGroup] = "detailInput"
+          (ngSubmit)="getReport()" >
+
+            <div class="form-row">
+              <div class="col">
+
+                <div class = "form-group row">
+                  <label class="col-md-3 col-form-label" >Paypoint ID:</label>
+                  <div class = "col-md-4">
+                    <!-- <select class="form-control" id="selectBrCode"
+                    formControlName = "PayPointID" [disabled]="disableForm"  (change)="getPaypointName()" required>
+                      <option [ngValue]="ppid"  *ngFor="let ppid of paypointIds">{{ppid[0]}}</option>
+                    </select> -->
+                    <select class="form-control" id="selectBrCode" 
+                    formControlName = "PayPointID" [disabled]="disableForm">
+                    <option [ngValue]="ppid"  *ngFor="let ppid of paypointIds">{{ppid[0]}}</option>
+                  </select>
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label">Paypoint Name:</label>
+                  <div class = "col-md-4">
+                    <!-- <input  class="form-control" id="disabled-input" type="text"
+                    formControlName = "Paypoint_Name" name="disabled-input" placeholder="Enter Paypoint Name"
+                      value={{paypointName}} disabled > -->
+                      <input  class="form-control" id="disabled-input" type="text" 
+                      formControlName = "Paypoint_Name" name="disabled-input" 
+                        value={{detailInput.value.PayPointID[1]}} [attr.disabled]="disabled ? '' : true">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label">Period :</label>
+                  <div  class = "col-md-4">
+                    <input class="form-control" id="date-input" type="date"
+                    formControlName = "Period" name="date-input" required>
+                  </div>
+                </div>
+
+                <div class="btn-toolbar">
+                  <div class="btn-group mr-2">
+                    <button type="submit" class="btn btn-md btn-primary " [disabled]="!detailInput.valid">Report</button>
+                  </div>
+                </div>
+
+            </div>
+
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+    <!-- Report/Results Container -->
+    <!--Show Spinner while data is loading-->
+    <div class="spinner" *ngIf="showSpinner">
+      <div class="rect1"></div>
+      <div class="rect2"></div>
+      <div class="rect3"></div>
+      <div class="rect4"></div>
+      <div class="rect5"></div>
+      <p>Processing....</p>
+    </div>
+    <!--Incase of an Error or Empty result-->
+    <div class="card text-center" *ngIf='error_message'>
+      <div class="card-header">
+        Error Message
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"><span style="color: red">{{err}}</span></h5>
+        <p class="card-text"><span style="color: green">*Please select a different paypoint / period*</span></p>
+             </div>
+      <div class="card-footer text-muted">
+        Description : Error code 100393 | on Paypoint ID:{{detailInput.value.PayPointID}}, Period: {{detailInput.value.Period}}
+      </div>
+    </div>
+
+
+
+
+    <div class="row" *ngIf="displayReport">
+        <div class="col-lg-12">
+          <div class="card">
+            <div class="card-header">
+              <i class="fa fa-align-justify"></i> Overs and Unders Report
+            </div>
+       <!--Tafole 1-->
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <i class="fa fa-align-justify"></i><b>Period: </b>{{detailInput.value.Period}}
+                    </div>
+                    <div class="card-body" >
+                      <table class="table">
+                        <thead>
+                          <tr>
+                            <th>Paypoint ID</th>
+                            <th>Paypoint Name</th>
+                            <th>Paypoint Type</th>
+                            <th>Paypoint Mode</th>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let paypoint of groupies | keyvalue">
+                            <td>{{paypoint.value[0].paypoint_id}}</td>
+                            <td>{{paypoint.value[0].pay_point_name}}</td>
+                            <td>{{paypoint.value[0].type_value}}</td>
+                            <td>{{paypoint.value[0].payment_mode}}</td>
+
+                          </tr>
+
+
+                        </tbody>
+                      </table>
+
+
+
+                    </div>
+                  </div>
+
+
+
+
+                </div>
+              </div>
+
+
+          </div>
+          <!--End Of tafole-->
+
+          <!--Table 2-->
+          <div class="card-body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card">
+
+                    <div class="card-body">
+                      <table class="table table-sm">
+                        <thead>
+                          <tr>
+                            <th>Collection Type</th>
+                            <th>Total</th>
+
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>DEBITS: </td>
+                            <td>{{total | number : '1.2'}}</td>
+                          </tr>
+                          <tr>
+                            <td>CREDITS: </td>
+                            <td>{{totalCred | number : '1.2'}}</td>
+
+
+                          </tr>
+
+
+
+                        </tbody>
+                      </table>
+
+
+
+                    </div>
+                  </div>
+
+
+
+
+                </div>
+              </div>
+
+
+          </div>
+
+          <!--Table 3-->
+          <div class="card-body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="card">
+                    <div class="card-header">
+
+                    <div class="card-body">
+                      <table class="table table-sm">
+                        <thead>
+                          <tr>
+                            <th>Reference Number</th>
+                            <th>Reference Name</th>
+                            <th>Policy Code</th>
+                            <th>Status</th>
+                            <th>Dr Amount</th>
+                            <th>Allocated Amount</th>
+                            <th>Difference Amount</th>
+
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let ppr3 of report">
+                            <td>{{ppr3.reference_no}}</td>
+                            <td>{{ppr3.reference_name}}</td>
+                            <td>{{ppr3.policy_code}}</td>
+                            <td>{{ppr3.status_desc}}</td>
+                            <td>{{ppr3.debits}}</td>
+                            <td>{{ppr3.credits}}</td>
+                            <td>{{ppr3.difference_amt}}</td>
+
+                          </tr>
+
+
+
+                        </tbody>
+                      </table>
+
+
+
+                    </div>
+                  </div>
+
+
+
+
+                </div>
+              </div>
+
+
+          </div>
+          <!--End Table-->
+
+          <div class="card-body">
+        <div class="row">
+            <div class= "col-lg-12">
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-block btn-primary" (click)="toggleDisplayReport()">Exit</button>
+
+              </div>
+
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-block btn-primary" >Print</button>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+
+      </div>
+</div>

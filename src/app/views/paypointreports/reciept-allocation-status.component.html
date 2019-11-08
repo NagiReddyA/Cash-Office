@@ -1,0 +1,153 @@
+<!-- Receipt Allocation Status - Paypoints Reports Module -->
+
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Receipt Allocation Report
+        </div>
+   
+        <div class="card-body">
+          <form [formGroup] = "detailInput" (ngSubmit) = "detailReport()">
+            <div class="form-row">
+              <div class="col">
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label">Receipt Number <span class="text-danger">*</span></label>
+                  <div class = "col-md-4">
+                    <input  class="form-control" id="text-input" type="number" 
+                    formControlName = "receipt_number" name="text-input" placeholder="Enter Receipt Number" ng-model="rnum" numbers-only class="form-control">
+                  </div>
+                </div>
+                <div class="btn-toolbar">
+                  <div class="btn-group mr-2">
+                    <button type="submit" class="btn btn-md btn-primary "[disabled]="!detailInput.valid">Report</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report/Results Container -->
+  <div class="row" *ngIf="displayReport">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Receipt Allocation Status Report <span class="text float-right">{{ today | date : "dd-MMM-yyyy" }}</span>
+        </div>
+
+        <!-- Table 1 -->
+        <div class="card-body">
+
+          <div class="card-row">
+            <div class="col-lg-12">
+              <!-- Receipt Header Details -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Receipt No</th>
+                    <th>Receipt Date</th>
+                    <th>Branch</th>
+                    <th>TRN Narration</th>
+                    <th>Receipt Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{headerDetails.receipt_no}}</td>
+                    <td>{{headerDetails.receipt_date}}</td>
+                    <td>{{headerDetails.branch_code}}</td>
+                    <td>{{headerDetails.trn_narration}}</td>
+                    <td>{{headerDetails.receipt_type}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <br>
+              
+          <!-- Table 2 -->
+          <div class="card-row">
+            <div class="col-lg-12">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Paypoint ID</th>
+                    <th>Receipt Amount</th>
+                    <th>Gross Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let receipt of receipts">
+                    <td>{{receipt.paypoint_id}}</td>
+                    <td>{{receipt.receipt | number : '.2-2' }}</td>
+                    <td>{{receipt.gross_receipted | number : '.2-2' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <br>
+            
+          <!--Table 3-->
+          <div class="card-row">
+            <div class="col-lg-12">
+              
+              <p class="font-weight-bold">Status: {{ receipt_status }} <span class="float-right">Amount: &nbsp; {{ amount | number : '.2-2' }} </span></p>
+              
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Policy Num</th>
+                    <th>Product</th>
+                    <th>Status</th>
+                    <th>Period</th>
+                    <th>Payer No</th>
+                    <th>Party Name</th>
+                    <th>Premium</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let receipt of receipts">
+                    <td>{{receipt.policy_num}}</td>
+                    <td>{{receipt.product_abbr}}</td>
+                    <td>{{receipt.status}}</td>
+                    <td>{{receipt.accounting_date}}</td>
+                    <td>{{receipt.payor_client_no}}</td>
+                    <td>{{receipt.party_name}}</td>
+                    <td class="text-right">{{receipt.premium | number : '.2-2' }}</td>
+                    <td class="text-right">{{receipt.amount | number : '.2-2' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <p class="h6 text-center">*** End of Report - Thito ***</p> <br>
+
+            </div>
+          </div>
+
+          <!-- Report controls -->
+          <div class="card-row text-center btn-toolbar">
+            <div class= "col-lg-12">
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-block btn-primary" (click)="toggleDisplayReport()">Exit</button>
+              </div>
+            
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-block btn-primary" click="print()">Print</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

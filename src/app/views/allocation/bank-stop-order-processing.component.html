@@ -1,0 +1,555 @@
+<!-- Direct Debit Processing - Allocation Module -->
+  
+<div class="animated fadeIn">
+  <!-- Bank Account Details -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Bank Account Details
+        </div>
+           
+        <div class="card-body">
+                 
+          <form [formGroup]="bnkAccDetails">
+
+            <!-- bgn: get 2-column form -->
+            <div class="form-row">
+              <!-- 1st Column: Mostly Enabled -->
+              <div class="col-lg-6">
+                                
+                <div class = "form-group row">
+                  <label class="col-md-4 col-form-label" >PAYMENT MODE</label>
+                  <div class = "col-md-6">
+                    <!-- <select class="form-control" formControlName = "paymentMode">
+                      <option></option> 
+                    </select> -->
+                    <select class="form-control" formControlName = "paymentMode" >
+                        
+                           <option > 
+                              BSO</option>
+                    </select>
+                  </div>
+                </div>
+
+                        <!-- Input with Search Button -->
+                        <!-- <div class="form-group row">
+                            <label class="col-md-4 col-form-label">BANK NAME</label>
+                            <div class="col-md-6">
+                              <div class="input-group">
+                                <input id="input2-group2" name="input2-group2" class="form-control">
+                                <span class="input-group-append">
+                                  <button type="button" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                </span>
+                              </div>
+                            </div>
+                          </div> -->
+          
+                <div class = "form-group row">
+                  <label class="col-md-4 col-form-label" >BANK NAME</label>
+                  <div class = "col-md-6">
+                    <select class="form-control" formControlName = "bankName" >
+                      <option [value]="p.bankname" *ngFor="let p of banknames"> 
+                        {{p.bankname}}</option>
+ 
+                    </select>
+                  </div>
+                </div>
+                                      
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label">CREATION DATE</label>
+                    <div class = "col-md-6">
+                    <input class="form-control"  formControlName = "creationDate" >
+                    </div>
+                </div>
+                         
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label">MODIFIED DATE</label>
+                  <div class = "col-md-6">
+                    <input class="form-control"   formControlName = "modifiedDate"  > 
+                  </div>
+                </div>
+      
+              </div>
+                      
+              <!-- 2nd Column: -->
+              <div class="col-lg-6">
+
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label" for="text-input">BANK STATEMENT ID</label>
+                  <div class="col-md-6">
+                    <input type="number" class="form-control" formControlName="bankStatementID">
+                  </div>
+                </div>
+                                  
+                <div class = "form-group row">
+                  <label class="col-md-4 col-form-label" >ACCOUNT NUMBER</label>
+                  <div class = "col-md-6">
+                    <input  class="form-control"  type="text" formControlName = "accountNo" >
+                  </div>
+                </div>
+                                    
+                <div class = "form-group row">
+                   <label class="col-md-4 col-form-label" >ACCOUNT DESCRIPTION</label>
+                    <div class = "col-md-6">
+                      <input class="form-control" formControlName = "accountDesc">
+                    </div>
+                </div>                                                    
+                             
+              </div>
+        
+            </div>
+            <!-- end: get 2-column form -->
+
+          </form>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Bank Statement Details -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Bank Statement Details
+        </div>
+   
+        <div class="card-body">
+          
+          <form [formGroup] = "bnkStmtDetails">
+
+            <!-- bgn: get 2-column form -->
+            <div class="form-row">
+              <!-- 1st Column: Mostly Enabled -->
+              <div class="col-lg-6">
+                       
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label" for="text-input">STATEMENT No.</label>
+                  <div class="col-md-6">
+                    <input type="text" class="form-control" formControlName="statementNo">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label">DATE FROM</label>
+                  <div class = "col-md-6">
+                    <input class="form-control"  formControlName = "fromDate"  >
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label" for="text-input">OPENING BALANCE</label>
+                  <div class="col-md-6">
+                    <input type="number" class="form-control" formControlName="openingBalance">
+                  </div>
+                </div>
+                 
+                <div class="form-group row">
+                  <!-- <label class="col-md-4 col-form-label">REVERSAL PERIOD</label>
+                  <div class = "col-md-6">
+                    <input class="form-control" id="date-input" type="date" 
+                      formControlName = "reversalPeriod" name="date-input" value = "2018-04-30">
+                    </div> -->
+
+                    <label class="col-md-4 col-form-label">REVERSAL PERIOD</label>
+                  <div class = "col-md-6">
+                    <input class="form-control"  formControlName = "reversalPeriod">
+                    </div>
+                </div>
+
+                
+
+              </div>
+              
+              <!-- 2nd Column: -->
+              <div class="col-lg-6">
+
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label" for="text-input">POSTING STATUS</label>
+                  <div class="col-md-6">
+                    <input class="form-control" formControlName="postingStatus"
+                      >
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-4 col-form-label">DATE TO</label>
+                   <div class = "col-md-6">
+                     <input class="form-control"  
+                      formControlName = "toDate" >
+                    </div>
+                 </div>
+                          
+                 <div class="form-group row">
+                    <label class="col-md-4 col-form-label" for="text-input">CLOSING BALANCE:</label>
+                    <div class="col-md-6">
+                      <input type="number" min="0" class="form-control" formControlName="closingBalance">
+                    </div>
+                  </div>
+
+                  <br>
+                            
+                  <div class="form-group row">
+                      <label class="col-md-4 col-form-label" for="text-input">LOGIN NAME:</label>
+                      <div class="col-md-6">
+                        <input class="form-control" formControlName="loginName" >
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                  <label class="col-md-4 col-form-label" for="text-input">BRANCH</label>
+                  <div class="col-md-6">
+                    <input class="form-control" formControlName="branch" >
+                  </div>
+                </div>
+                     
+              </div>
+
+            </div>
+            <!-- end: get 2-column form -->
+
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+            
+  <!-- Bank Statement Allocations -->
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Bank Statement Allocations
+        </div>
+        
+        <div class="card-body">
+
+          <!-- Statement Allocations Tabs -->
+          <div class= 'row'>
+
+            <div class="col-lg-12"> 
+              <tabset >
+               
+                <tab heading="Premium" >
+                  <div class="card-body">
+
+                    <!-- bgn: actual editable -->
+                    <form [formGroup]="myForm">
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                          <thead class="thead-light">
+                            <tr>
+                              <th></th>
+                              <th>TRANSACTION TYPE</th>
+                              <th style="width: 100px;">PERIOD</th>
+                              <th>Policy CODE</th>
+                              <th>Policy status</th>
+                              <th>Payor</th>
+                              <th>EXCEPTED Perimum</th>
+                              <th>Allocated perimum</th>
+                          
+                              <th>DELETE</th>
+                            </tr>
+                          </thead>
+                              
+                              <tbody formArrayName="corrections">
+
+                                <tr *ngFor="let bso of pagedItems">
+                                  <td class="text-center"><input type="checkbox" ></td>
+                                  <td>{{bso.bkTransactionType}}</td>
+                                  <td>{{bso.period}}</td>
+                                  <td>{{bso.policyCode}}</td>
+                                  <td>{{bso.policyStatusId | Policystatusidcustompipe}}</td>
+                                  <td>{{bso.payor}}</td>
+                                  <td>{{bso.expectedPremium}}</td>
+                                  <td>{{bso.allocatedAmount}}</td>
+                                  <td><button type="submit" class="btn btn-md btn-primary" >
+                                      <i class="fa fa-trash" ></i></button></td>
+                                 
+                                </tr>
+                    
+                                <tr *ngFor="let correction of correctionForms.controls; let i=index" [formGroupName]="i">
+                                  
+                                  <td ><input formControlName="corSelect" type="checkbox"></td>
+                                  <!-- <td><input formControlName="corTransType"></td> -->
+                                  <td>
+                                  <select class="form-control" formControlName = "corTransType" >
+                                      <option> </option>
+               
+                                  </select>
+                                </td>
+                                  <td><input formControlName="corPeriod" type="date"></td>
+                                  <td><input formControlName="corPolicyCode"  (change)="fetchpolicydetailsbypcodeperiod(i)"> </td>
+                                  <td><input formControlName="corPolicyStatus" > </td>
+                                  <td><input  formControlName="corPayer"></td>                        
+                                  <td><input formControlName="corExceptedPremium" ></td>
+                                  <td><input formControlName="corAllocatedPremium"></td>
+                                  <td><button type="submit" class="btn btn-md btn-primary" (click)="deleteCorrection()">
+                                    <i class="fa fa-trash"></i></button></td>
+                                </tr>
+                        
+                              </tbody>
+                            </table>
+                            <nav>
+                              <ul class="pagination">
+                                <li class="page-item" [ngClass]="{disabled:pager.currentPage === 1}">
+                                  <a class="page-link" (click)="setPage(pager.currentPage - 1)">Previous</a>
+                                </li>
+                                <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}" class="page-item active">
+                                  <a class="page-link" (click)="setPage(page)">{{page}}</a>
+                                </li>
+                                <li class="page-item" [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                                  <a class="page-link" (click)="setPage(pager.currentPage + 1)">Next</a>
+                                </li>
+                              </ul>
+                            </nav>
+                            
+                        </div>
+
+                        <br><br>
+                        
+                        <p class="h6 text-right">Paypoint Total: BWP </p>
+                            
+                        <div class="btn-toolbar">
+                          <div class="btn-group mr-2">
+                            <button type="submit" class="btn btn-md btn-primary" (click)="addCorrection()">ADD</button> 
+                          </div>
+                        </div>
+                        
+                    </form>
+                    <!-- end: actual editable -->
+
+                  </div>
+               
+                </tab>
+           
+
+            
+
+               
+
+                <tab heading="Sundry" >
+                  <div class="card-body">
+                    <form [formGroup]="myForm">
+                      <div class="table-responsive">
+                        <table class="table table-bordered table-hover">
+                          <thead class="thead-light">
+                            <tr>
+                              <th></th>
+                              <th>TRANSACTION TYPE</th>
+                              <th>DESCRIPTION</th>
+                              <th>TRANSACTION DATE</th>
+                              <th>ALLOCATED AMOUNT</th>
+                              <th>DELETE</th>
+                            </tr>
+                          </thead>
+                              
+                          <tbody formArrayName="corrections1">
+
+
+                            
+                              <tr  *ngFor="let dde of pagedItems1">
+                                  <td class="text-center"><input type="checkbox"></td>
+                                  
+                                  <td>{{dde.bK_TRANSACTION_TYPE}}</td>
+                                  <td>{{dde.bK_TRANSACTION_DESC}}</td>
+                                  <td>{{dde.pERIOD }}</td>
+                                  <td>{{dde.aLLOCATED_AMOUNT}}</td> 
+                                  <td><button type="submit" class="btn btn-md btn-primary" >
+                                      <i class="fa fa-trash"></i></button></td>
+                                 
+                                </tr>
+                
+                            <tr *ngFor="let correction of correctionForms1.controls; let i=index" [formGroupName]="i">
+                              <td>
+                                
+                                  <input  type="checkbox" formControlName="corSelectsun">
+                              </td>
+                              <td>
+                                  <select class="form-control" formControlName = "corTransTypesun" >
+                                      <option> 
+                                        </option>
+               
+                                  </select>
+                                  
+                                      <!-- <input formControlName="corTransType"> -->
+                                
+                              </td>
+                              <td><input formControlName="corSundryDescription"></td>
+                              <td><input class="form-control" type="date" 
+                                formControlName = "corTransDatesun" ></td>
+                              <td><input formControlName="corAllocatedAmntsun"></td>
+                              <td><button type="submit" class="btn btn-md btn-primary" (click)="deleteCorrection1()">
+                                <i class="fa fa-trash"></i></button></td> 
+                            </tr>
+                    
+                          </tbody>
+                        </table>
+                        <nav>
+                          <ul class="pagination">
+                            <li class="page-item" [ngClass]="{disabled:pager1.currentPage === 1}">
+                              <a class="page-link" (click)="setPage1(pager1.currentPage - 1)">Previous</a>
+                            </li>
+                            <li *ngFor="let page of pager1.pages" [ngClass]="{active:pager1.currentPage === page}" class="page-item active">
+                              <a class="page-link" (click)="setPage1(page)">{{page}}</a>
+                            </li>
+                            <li class="page-item" [ngClass]="{disabled:pager1.currentPage === pager1.totalPages}">
+                              <a class="page-link" (click)="setPage1(pager1.currentPage + 1)">Next</a>
+                            </li>
+                          </ul>
+                        </nav>
+                            
+                      </div>
+  
+                      <br><br>
+                      
+                      <p class="h6 text-right">Sundry Total: BWP </p>
+                          
+                      <div class="btn-toolbar">
+                        <div class="btn-group mr-2">
+                          <button type="submit" class="btn btn-md btn-primary" (click)="addCorrection1()">ADD</button> 
+                        </div>
+                      </div>
+                        
+                    </form>
+                  </div>
+                </tab>
+
+                <tab heading="Unspecified" >
+                  <div class="card-body" >
+
+                      <form [formGroup]="myForm">
+                          <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                              <thead class="thead-light">
+                                <tr>
+                                  <th></th>
+                                  <th>TRANSACTION TYPE</th>
+                                  <th>DESCRIPTION</th>
+                                  <th>PERIOD</th>
+                                  <th>ALLOCATED AMOUNT</th>
+                                  <th>DELETE</th>
+                                </tr>
+                              </thead>
+                                  
+                              <tbody formArrayName="corrections2">
+                                 
+                                  <tr *ngFor="let dde of bsounspecified">
+                                      <td class="text-center"><input type="checkbox"></td>
+                                      
+                                      <td>{{dde.bK_TRANSACTION_TYPE}}</td>
+                                      <td>{{dde.bK_TRANSACTION_DESC}}</td>
+                                      <td>{{dde.pERIOD | date: 'yyyy/MM/dd'}}</td>
+                                      <td>{{dde.aLLOCATED_AMOUNT}}</td> 
+                                      <td><button type="submit" class="btn btn-md btn-primary" >
+                                          <i class="fa fa-trash"></i></button></td>
+                                     
+                                    </tr>
+                                 
+                                  
+                                <tr *ngFor="let correction of correctionForms2.controls; let i=index" [formGroupName]="i">
+                                    <td><input formControlName="UCHECK" type="checkbox" ></td>
+
+                                  <td>
+                                    
+                                      <select class="form-control" formControlName = "uTransactionType" >
+                                          <option > 
+                                           </option>
+                   
+                                      </select>
+                                    
+                                    <!-- <input formControlName="uTransactionType"> -->
+                                  
+                                  </td>
+                                  <td><input formControlName="uDescription"></td>
+                                  <td><input  formControlName="uperiod" type="date"></td>
+                                  <td><input  type="number" formControlName="uallocatedamount"></td>
+                                  <td><button type="submit" class="btn btn-md btn-primary" (click)="deleteCorrection2()">
+                                    <i class="fa fa-trash"></i></button></td>
+                                </tr>
+                        
+                              </tbody>
+                            </table>
+                            <nav>
+                              <ul class="pagination">
+                                <li class="page-item" [ngClass]="{disabled:pager2.currentPage === 1}">
+                                  <a class="page-link" (click)="setPage2(pager2.currentPage - 1)">Previous</a>
+                                </li>
+                                <li *ngFor="let page of pager2.pages" [ngClass]="{active:pager2.currentPage === page}" class="page-item active">
+                                  <a class="page-link" (click)="setPage1(page)">{{page}}</a>
+                                </li>
+                                <li class="page-item" [ngClass]="{disabled:pager2.currentPage === pager2.totalPages}">
+                                  <a class="page-link" (click)="setPage2(pager2.currentPage + 1)">Next</a>
+                                </li>
+                              </ul>
+                            </nav>
+                                
+                          </div>
+      
+                          <br><br>
+                          
+                          <p class="h6 text-right">Unspecified Total: BWP </p>
+                              
+                          <div class="btn-toolbar">
+                            <div class="btn-group mr-2">
+                              <button type="submit" class="btn btn-md btn-primary" (click)="addCorrection2()">ADD</button> 
+                            </div>
+                          </div>
+                            
+                        </form>
+                    
+                  </div>
+                </tab>
+
+              </tabset>
+
+            </div>
+
+          </div>
+        
+          <br>
+          <!-- Controls -->
+          <div class="row btn-toolbar text-center">
+            
+            <div class= "col-lg-12">
+                             
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="save()">Save</button>
+              </div>
+              
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="search(bnkAccDetails.get('bankStatementID').value)">Search</button>
+              </div>  
+            
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="clear()">Clear</button>
+              </div>
+
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="cancel()">Cancel</button>
+              </div>
+
+              <div class="btn-group mr-2">
+                  <button type="button" class="btn btn-md btn-primary" (click)="exit()">Exit</button>
+              </div>
+
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="print()">Print Bank Statement Details</button>
+              </div>
+          
+            </div>
+
+          </div>
+            
+        </div>
+        
+      </div>
+
+    </div>
+        
+  </div>
+
+</div>

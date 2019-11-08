@@ -1,0 +1,236 @@
+<!-- Partial MisAllocation Correction - Allocation Module -->
+<!-- Sample Data: Policy 0000470669 Period 01-Oct-2014 -->
+
+<div class="animated fadeIn">
+  <!-- Mis-allocated Policy Information -->
+  <div class="row" *ngIf="true">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Mis-allocated Policy Information
+        </div>
+           
+        <div class="card-body">
+          
+          <form [formGroup] = "misallocatedInput">
+            <div class="form-row">
+
+              <div class="col-lg-6">
+                           
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label" for="text-input">Policy Code <span class="text-danger">*</span></label>
+                  <div class="col-md-6">
+                    <input type="number" min="0" class="form-control" formControlName="policyCode">
+                  </div>
+                </div>
+    
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label">Period <span class="text-danger">*</span></label>
+                  <div class = "col-md-6">
+                    <input class="form-control" id="date-input" type="date" 
+                      formControlName = "period" value = "2018-09-01">
+                  </div>
+                </div>
+                    
+                <div class="btn-toolbar">
+                  <div class="btn-group mr-2">
+                    <button type="submit" class="btn btn-md btn-primary" (click)="search(misallocatedInput.policyCode)"
+                      [disabled]="!misallocatedInput.valid">Search</button> 
+                    </div>
+                </div>
+
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group row">
+                  <label class="col-md-4 col-form-label" for="text-input">Misallocation ID</label>
+                  <div class="col-md-6">
+                    <input class="form-control" formControlName="misallocationID">
+                  </div>
+                 </div>
+              </div>
+        
+            </div>
+
+            <br>
+
+            <!-- Listing Mis-allocated Items -->
+            <div class="form-row">
+
+              <!-- Items up for correction -->
+              <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>ID <span class="text-danger">*</span></th>
+                      <th>Policy Code <span class="text-danger">*</span></th>
+                      <th>Policy Status <span class="text-danger">*</span></th>
+                      <th>Period <span class="text-danger">*</span></th>
+                      <th>Payer <span class="text-danger">*</span></th>
+                      <th>Receipt Number <span class="text-danger">*</span></th>
+                      <th>Amount <span class="text-danger">*</span></th>
+                      <th>Posting Status <span class="text-danger">*</span></th>
+                    </tr>
+                  </thead>
+                    
+                  <tbody *ngIf="viewMisallocations">
+                    <tr *ngFor="let misallocation of misallocations; let i = index">
+                      <td>
+                        <div class="form-check">
+                          <input class="form-check-input" type="radio" name="radios" id="radio2"
+                              (click)="onSelect(misallocation, i)">
+                          <label class="form-check-label" for="radio2">{{misallocation.collID}}</label>
+                        </div> 
+                      </td>
+                      <td>{{misallocation.policyCode}}</td>
+                      <td>{{misallocation.policyStatus}}</td>
+                      <td>{{misallocation.period}}</td>
+                      <td>{{misallocation.payer}}</td>
+                      <td>{{misallocation.receiptNo}}</td>
+                      <td class="text-right">{{misallocation.amount}}</td>
+                      <td>{{misallocation.postingStatus}}</td>
+                    </tr>
+                      
+                  </tbody>
+    
+                </table>
+              </div>
+
+            </div>
+
+            <div class = "form-row">
+
+              <!-- Transaction Type -->
+              <div class="form-group row">
+                <label class="col-md-5 col-form-label">Transaction Type</label>
+                <div class="col-md-7">
+    
+                  <div class="col-md-9 col-form-label">
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="transType" id="radio1" formControlName = "transType" value="allocation"
+                      (click)="toggleMakeCorrections('allocate')">
+                      <label class="form-check-label" for="radio1">Premium Re-allocation</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" name="transType" id="radio2" formControlName = "transType" value="reverse"
+                      (click)="toggleMakeCorrections('reverse')">
+                      <label class="form-check-label" for="radio2">Reverse</label>
+                    </div>
+        
+                  </div>
+                </div>
+              </div>
+                    
+            </div>
+    
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Policy Allocation (Correction) -->
+  <div class="row" *ngIf="makeCorrections">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Policy Allocation (Correction)
+        </div>
+        
+        <div class="card-body">
+
+          <div class= 'row'>
+            <div class="col-lg-12">
+
+              <form [formGroup]="myForm">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Policy Code <span class="text-danger">*</span></th>
+                        <th>Period <span class="text-danger">*</span></th>
+                        <th>Party ID <span class="text-danger">*</span></th>
+                        <th>Payer Name <span class="text-danger">*</span></th>
+                        <th>Expected Amount <span class="text-danger">*</span></th>
+                        <th>Purpose <span class="text-danger">*</span></th>
+                        <th>Allocated Amount <span class="text-danger">*</span></th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    
+                    <tbody formArrayName="corrections">
+
+                      <tr *ngFor="let correction of correctionForms.controls; let i=index" [formGroupName]="i">
+                        <td>
+
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="corSelect" formControlName="corSelect" value={{i}}>
+                            <label class="form-check-label" for="corSelect">
+                                <input formControlName="corPolicyCode"></label>
+                          </div>
+
+                        </td>
+
+                        <td><input class="form-control" type="date" 
+                          formControlName = "corPeriod" value = "2018-09-01"></td>
+                        <td><input formControlName="corPartyID"></td>
+                        <td><input formControlName="corPayerName"></td>
+                        <td><input formControlName="corExpectedAmnt"></td>
+                        <td><input formControlName="corPurpose"></td>
+                        <td><input formControlName="corAllocatedAmnt"></td>
+                        <td><button type="submit" class="btn btn-md btn-primary" (click)="deleteCorrection()"><i class="fa fa-trash"></i></button></td>
+                      </tr>
+
+                      <tr>
+                        <td>
+                          <button type="submit" class="btn btn-md btn-primary" (click)="addCorrection()">ADD POLICY</button>
+                        </td>
+                        <td colspan="5" class="text-center font-weight-bold">Total Allocated Amount</td>
+                        <td class="h6 text-right">{{totalAllocatedAmount | number : '.2-2' }}</td>
+                        <td></td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                  
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+        
+        </div>
+
+      </div>
+    </div>
+        
+  </div>
+
+  <!-- Button Things -->
+  <div class="row btn-toolbar text-center">
+    <div class= "col-lg-12">
+                      
+      <div class="btn-group mr-2">
+        <button type="button" class="btn btn-md btn-primary" (click)="clear()">CLEAR</button>
+      </div>  
+
+      <div class="btn-group mr-2">
+          <button type="button" class="btn btn-md btn-primary" (click)="save()">SAVE</button>
+      </div>  
+
+      <div class="btn-group mr-2">
+          <button type="button" class="btn btn-md btn-primary" (click)="post()">POST</button>
+      </div>
+
+      <div class="btn-group mr-2">
+        <button type="button" class="btn btn-md btn-primary" (click)="exit()">EXIT</button>
+      </div>
+        
+    </div>
+  </div>
+
+  <br>
+</div>

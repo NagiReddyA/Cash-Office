@@ -1,0 +1,278 @@
+<!-- Electroninc Allocation - Allocation Module -->
+
+<div class="animated fadeIn">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-align-justify"></i> Electronic Allocation
+          </div>
+     
+          <div class="card-body"> <!-- BEGIN: Form Content-->
+            <form [formGroup] = "electronicInput" (ngSubmit)="electronicAllocation()">
+
+              <div class="form-row">
+                <!-- 1st Column: Mostly Enabled -->
+                <div class="col-lg-6">
+                          
+                  <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Paypoint ID <span class="text-danger">*</span></label>
+                    <div class = "col-md-6">
+                      <select class="form-control" id="selectBrCode" 
+                        formControlName = "paypointID" [disabled]="disableForm">
+                          <option [ngValue]="ppid"  *ngFor="let ppid of paypoints">{{ppid.ppID}}</option> 
+                      </select>
+                    </div>
+                  </div>
+    
+                   <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Credit Files <span class="text-danger">*</span></label>
+                    <div class = "col-md-6">
+                      <select class="form-control" id="selectCrFile" 
+                        formControlName = "creditFile" [disabled]="disableForm">
+                          <option [ngValue]="crFile" *ngFor="let crFile of creditFiles"> {{crFile.crFileNo}}</option>
+                      </select>
+                    </div>
+                  </div>
+                    
+                  <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Receipt No. <span class="text-danger">*</span></label>
+                    <div class = "col-md-6">
+                      <small class="form-text text-danger">Receipt Number (Allocation Period)</small>
+                      <select class="form-control" id="selectReceiptNo" formControlName = "receiptNo" [disabled] = "disableForm">
+                        <option [ngValue]="receipt" *ngFor="let receipt of receipts">{{receipt.rctNo}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Receipt Period</label>
+                    <div class = "col-md-6">
+                      <input class="form-control" formControlName = "receiptPeriod" value={{electronicInput.value.receiptNo.rctPeriod}}>
+                    </div>
+                  </div>
+                  
+                  <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Statement No. <span class="text-danger">*</span></label>
+                    <div class = "col-md-6">
+                      <select class="form-control" id="selectStmtNo" formControlName = "statementNo" [disabled]="disableForm">
+                        <option [ngValue]="statement" *ngFor="let statement of statements">{{statement.stmtNo}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Statement Period</label>
+                    <div class = "col-md-6">
+                      <input class="form-control" formControlName = "statementPeriod" value={{electronicInput.value.statementNo.stmtPeriod}}>
+                    </div>
+                  </div>
+
+                  <div class="form-group row">
+                     <label class="col-md-4 col-form-label">Allocated Period <span class="text-danger">*</span></label>
+                    <div class = "col-md-6">
+                      <input class="form-control" id="date-input" type="date" 
+                       formControlName = "allocatedPeriod" name="date-input" value = "2018-09-30">
+                     </div>
+                  </div>
+
+                </div>
+                
+                <!-- 2nd Column: All Disabled -->
+                <div class="col-lg-6">
+                            
+                  <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Paypoint Name</label>
+                    <div class = "col-md-6">
+                      <input  class="form-control" id="disabled-input" type="text" 
+                        formControlName = "paypointName" name="disabled-input" 
+                          value={{electronicInput.value.paypointID.ppName}}>
+                    </div>
+                  </div>
+                              
+                  <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Credit File Amount</label>
+                      <div class = "col-md-6">
+                        <input class="form-control" formControlName = "creditFileAmount"
+                          value = {{electronicInput.value.creditFile.crFileAmnt}}>
+                      </div>
+                  </div>
+
+                  <div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Gross Amount</label>
+                    <div class = "col-md-6">
+                      <input class="form-control" formControlName = "grossAmountReceipt"
+                        value = {{electronicInput.value.receiptNo.rctAmnt}}>
+                    </div>
+                  </div>
+
+                  <br>
+                  <br>
+
+                  <p><div class = "form-group row">
+                    <label class="col-md-4 col-form-label" >Gross Amount</label>
+                      <div class = "col-md-6">
+                        <input class="form-control" formControlName = "grossAmountStatement"
+                          value = {{electronicInput.value.statementNo.stmtAmnt}}>
+                      </div>
+                  </div><p></p>
+                        
+                </div>
+  
+              </div>
+  
+              <hr>
+              
+              <!-- form control buttons here:  -->
+              <div class = "form-row text-center btn-toolbar">
+                <div class= "col-lg-12">
+                  <div class="btn-group mr-2">
+                    <button type="submit" class="btn btn-md btn-primary" (click)= "allocate()">Allocate</button> 
+                    <!-- <button type="submit" class="btn btn-md btn-primary" [disabled] = "electronicInput.invalid" (click)= "allocate()">Allocate</button>  -->
+                  </div>
+  
+                  <div class="btn-group mr-2">
+                    <button type="button" class="btn btn-md btn-primary" (click)="clear()">Clear</button>
+                  </div>
+  
+                  <div class="btn-group mr-2">
+                    <button class="btn btn-md btn-primary" (click)="exit()">EXIT</button> 
+                  </div>
+                </div>
+              </div>
+  
+            </form>
+          </div> <!-- END: Form Content -->
+  
+        </div>
+      </div>
+    </div>
+
+  <!-- Report/Results Container displayAllocation -->
+  <div class="row" *ngIf="displayAllocation">  
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Bank Statement Posting Report
+          <span class="text float-right">{{ today | date : "d-MMM-y" }}</span>        </div>
+  
+        <div class="card-body">
+          <div class="row">
+
+            <div class="col-lg-6">
+              <div class="row">
+                <p class="col-lg-4 font-weight-bold">Bank Account</p>
+                <p class="col-lg-6">{{bankStatement.bankAccNo}}</p>
+              </div>
+
+              <div class="row">
+                <p class="col-lg-4 font-weight-bold">Bank Statement ID</p>
+                <p class="col-lg-6">{{bankStatement.bankStmID}}</p>
+              </div>
+
+              <div class="row">
+                <p class="col-lg-4 font-weight-bold">Statement No.</p>
+                <p class="col-lg-6">{{bankStatement.stmtNo}}</p>
+              </div>
+
+              <div class="row">
+                <p class="col-lg-4 font-weight-bold">Date From</p>
+                <p class="col-lg-6">{{bankStatement.fromDate}}</p>
+              </div>
+
+              <div class="row">
+                <p class="col-lg-4 font-weight-bold">Date To</p>
+                <p class="col-lg-6">{{bankStatement.toDate}}</p>
+              </div>
+
+              <div class="row">
+                <p class="col-lg-4 font-weight-bold">Opening Balance</p>
+                <p class="col-lg-6">{{bankStatement.openingBalance}}</p>
+              </div>
+              
+            </div>
+
+            <div class="col-lg-6">
+                <div class="row">
+                    <p class="col-lg-4 font-weight-bold">Bank Name</p>
+                    <p class="col-lg-6">{{bankStatement.bankName}}</p>
+                  </div>
+                  <div class="row">
+                      <p class="col-lg-4 font-weight-bold">Input Date</p>
+                      <p class="col-lg-6">{{bankStatement.inputDate}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="col-lg-4 font-weight-bold">Cashier Code</p>
+                        <p class="col-lg-6">{{bankStatement.cashierCode}}</p>
+                      </div>
+
+                      <div class="row">
+                        <p class="col-lg-4 font-weight-bold">Cashier Name</p>
+                        <p class="col-lg-6">{{bankStatement.cashierName}}</p>
+                      </div>
+
+                      <br> 
+
+                      <div class="row">
+                        <p class="col-lg-4 font-weight-bold">Closing Balance</p>
+                        <p class="col-lg-6">{{bankStatement.closingBalance}}</p>
+                      </div>
+            </div>
+    
+          <br>
+
+           <div class="col-lg-12">
+
+            <!-- Reprint Receipt -->
+              <table class="table table-bordered table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Transaction Description</th>
+                    <th>Policy Number</th>
+                    <th>POLICY Payer</th>
+                    <th>Pay Mode</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                
+                <tbody>
+                  <!-- begin: loop for listing the receipts --> 
+                  <tr *ngFor="let transaction of stmTransactions">
+                    <td>{{transaction.transDesc}}</td>
+                    <td>{{transaction.policyNo}}</td>
+                    <td>{{transaction.policyPayor}}</td>
+                    <td>{{transaction.payMode}}</td>
+                    <td class="text-right">{{transaction.amount}}</td>
+                  </tr>
+
+                  <tr class="font-weight-bold">
+                    <td class="text-center" colspan="4">Net Movement: </td><td class="text-right">{{netMovement | number : '.2-2' }}</td>
+                  </tr>
+
+                </tbody>
+
+              </table>
+
+           </div>
+           
+          </div>
+
+          <div class="row btn-toolbar text-center">
+            <div class= "col-lg-12">
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary">Print</button>
+              </div>
+ 
+              <div class="btn-group mr-2">
+                  <button type="button" class="btn btn-md btn-primary" (click)="toggleDisplayReport()">Exit</button>
+                </div>
+            </div>
+            </div>
+
+        </div>       
+
+      </div>
+    </div>
+  </div>
+
+</div>

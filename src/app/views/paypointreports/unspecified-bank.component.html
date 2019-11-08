@@ -1,0 +1,134 @@
+<!-- Unspecified Bank - Paypoint Reports Module -->
+
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Unspecified Report (Banks)
+        </div>
+   
+        <div class="card-body">
+          <form [formGroup] = "unspecifiedInput" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <div class="col">
+                      
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label">From Date</label>
+                  <div>
+                    <input class="form-control" id="date-input" type="date" 
+                    formControlName = "fromDate" name="date-input" value = "2011-11-01">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label">To Date</label>
+                  <div>
+                    <input class="form-control" id="date-input" type="date" 
+                    formControlName = "toDate" name="date-input" value = "2011-11-01">
+                  </div>
+                </div>
+
+                <div class="btn-toolbar">
+                  <div class="btn-group mr-2">
+                    <button type="submit" class="btn btn-md btn-primary " [disabled]="unspecifiedInput.untouched || displayReport==true">Report</button> 
+                  </div>
+                </div>
+                        
+            </div>
+                      
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report/Results Container -->
+  <div class="row" *ngIf="displayReport">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Unspecified Bank Report
+          <span class="text float-right">{{ today | date : "d-MMM-y" }}</span>
+        </div>
+   
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+
+              <!-- <p>Report No. : {{reportNo}}</p> -->
+
+              <p class="h6">Period: 
+                {{ unspecifiedInput.get("fromDate").value | date : "dd-MMM-yy" | uppercase }} To 
+                  {{unspecifiedInput.get("toDate").value | date : "dd-MMM-yy" | uppercase }} </p>
+              
+              <br>
+
+              <!-- Unspecified Bank Report -->
+              <div class="table-responsive">
+              <table class="table-sm table-bordered table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Statement ID</th>
+                    <th>Pay Mode</th>
+                    <th>Bank Name</th>
+                    <th>Account No.</th>
+                    <th>Statement No.</th>
+                    <th>Period</th>
+                    <th>Trans Type</th>
+                    <th>Transaction Description</th>
+                    <th>Unallocated Amount</th>
+                  </tr>
+                </thead>
+                
+                <tbody>
+                  <!-- begin: loop for listing the receipts --> 
+                  <tr *ngFor="let statement of bankStatements">
+                    <td>{{statement.bank_stmt_id}}</td>
+                    <td>{{statement.pay_mode}}</td>
+                    <td>{{statement.bank_name}}</td>
+                    <td>{{statement.bank_ac_no}}</td>
+                    <td>{{statement.bank_stmt_number}}</td>
+                    <td>{{statement.period}}</td>
+                    <td>{{statement.trans_type}}</td>
+                    <td>{{statement.trans_desc}}</td>
+                    <td class="text-right">{{statement.alloc_amt | number: '.2-2' }}</td> <!-- correct column | xpression -->
+                  </tr>
+                  
+                </tbody>
+
+              </table>
+              </div>
+
+              <br>
+              <p class="h6 text-right font-weight-bold">Total: {{totalUnallocated | number : '.2-2' }}</p>
+
+              <p class="h6 text-center">*** End of Report ***</p>            
+              <br>
+
+            </div>
+
+          </div>
+
+          <div class="row text-center btn-toolbar">
+            <div class= "col-lg-12">
+              
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="print()">Print</button>
+              </div>
+
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="toggleDisplayReport()">Exit</button>
+              </div>
+
+            </div>
+          </div> 
+
+      </div>
+      
+    </div>
+  </div>
+
+</div> 

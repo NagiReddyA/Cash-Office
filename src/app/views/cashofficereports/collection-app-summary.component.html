@@ -1,0 +1,123 @@
+<!-- Collection - Application Summary -->
+
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> App Collection by Branch
+        </div>
+   
+        <div class="card-body">
+          
+          <form [formGroup] = "detailInput" (ngSubmit)="detailReport()">
+            <div class="form-row">
+              <div class="col">
+                         
+                <div class = "form-group row">
+                  <label class="col-md-3 col-form-label" >Branch Code</label>
+                  <div>
+                    <select class="form-control" id="selectBrCode" formControlName = "branchCode">
+                      <option *ngFor= "let branchCode of branchCodes" [ngValue]="branchCode">{{branchCode}}</option>
+                    </select>
+                  </div>
+                </div>
+                        
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label">From Date</label>
+                  <div>
+                    <input class="form-control" id="date-input" type="date" 
+                    formControlName = "fromDate" name="date-input" value = "2019-01-01">
+                  </div>
+                </div>
+
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label">To Date</label>
+                  <div>
+                    <input class="form-control" id="date-input" type="date" 
+                    formControlName = "toDate" name="date-input" value = "2019-01-31">
+                  </div>
+                </div>
+                        
+                <div class="btn-toolbar">
+                  <div class="btn-group mr-2">
+                    <button type="submit" class="btn btn-md btn-primary "[disabled]="!detailInput.valid">Report</button>
+                  </div>
+                </div>
+                        
+            </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Report/Results Container displayReport-->
+  <div class="row" *ngIf="displayReport">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> <b>All Applications:</b> &nbsp; {{receipts ? branchName : ""}}
+        </div>
+    
+        <div class="card-body" *ngFor="let groupie of groupies | keyvalue">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-header">
+                  <i class="fa fa-align-justify"></i>Payment for {{groupie.key}}
+                </div>
+                <div class="card-body">
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th>Payment Method</th>
+                        <th>Amount</th>
+                        <th>Count</th>                        
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of groupie.value">
+                        <td>{{item.pay_method_desc}}</td>
+                        <td class="text-right">{{item.allocated_amount | number : '.2-2' }}</td>
+                        <td class="text-right">{{item.receipt_count}}</td>                         
+                      </tr>
+                      <tr class="font-weight-bold">
+                        <td class="text-center">Total</td>
+                        <td *ngIf="receipts" class="text-right">{{ getSum(groupie.value) | number : '.2-2' }}</td>
+                        <td *ngIf="receipts" class="text-right">{{ getCount(groupie.value) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>                     
+                  
+                </div>
+
+              </div>                
+              
+            </div>
+          </div>
+        </div>
+
+        <p class="font-weight-bold text-center">Total Collection by Branch: {{totalBranch | number : '.2-2' }}</p>
+
+        <div class="row text-center btn-toolbar">
+          <div class= "col-lg-12">
+            <div class="btn-group mr-2">
+              <button type="button" class="btn btn-md btn-primary">Print</button>
+            </div>
+
+            <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="toggleDisplayReport()">Exit</button>
+              </div>
+          </div>
+        </div>
+
+        <br> <!-- /? -->
+
+      </div>
+    </div>
+  </div>
+
+</div>

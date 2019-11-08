@@ -1,0 +1,197 @@
+<!-- Daily Receipt Listing - Cash Office Reports module -->
+
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Daily Receipt Listing
+        </div>
+   
+        <div class="card-body">
+
+          <!-- BEGIN: Receipt Listing FORM -->
+          <form [formGroup] = "listingInput" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <div class="col">
+
+                <div class = "form-group row">
+                  <label class="col-md-2 col-form-label" >Branch Code</label>
+                  <div class = "col-md-4">
+                    <select class="form-control" id="selectBrCode" formControlName = "branchCode"
+                      (change)="getCashOfficeCodes()">
+                      <option *ngFor= "let branchCode of branchCodes" [ngValue]="branchCode"
+                        
+                        >{{branchCode}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class = "form-group row">
+                  <label class="col-md-2 col-form-label" >CashOffice Code</label>
+                  <div class = "col-md-4">
+                    <select class="form-control" id="selectCOCode" formControlName = "cashOfficeCode"
+                    (change)="getCashierCodes()"> <!-- refactoring: might as well call gCC() when picking branchCode -->
+                      <option *ngFor= "let cashOfficeCode of cashOfficeCodes" 
+                        [ngValue]="cashOfficeCode">{{cashOfficeCode}}</option>
+                    </select>
+                  </div>
+                </div>
+                         
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label" >Cashier Code</label>
+                  <div class = "col-md-4">
+                    <select class="form-control" id="selectCaCode" formControlName = "cashierCode">
+                      <option *ngFor="let cashierCode of cashierCodes" [ngValue]="cashierCode">{{cashierCode}}</option>
+                    </select>
+                  </div>
+                </div>
+                        
+                <div class="form-group row">
+                  <label class="col-md-2 col-form-label">Report Date</label>
+                  <div class = "col-md-4">
+                      <input class="form-control" id="date-input" type="date" name="date-input" value = "2019-01-01" formControlName="reportDate"/>
+                  </div>
+                </div>
+                        
+                <div class="btn-toolbar">
+                  <div class="btn-group mr-2">
+                    <button type="submit" class="btn btn-md btn-primary" [disabled]="!listingInput.valid">Report</button>
+                  </div>
+                </div>
+                        
+            </div>
+                      
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Report/Results Container -->
+  <div class="row" *ngIf="displayReport">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i>Daily Receipts / Debit Listing
+          <span class="text float-right">{{ today | date : "d-MMM-y" }}</span>
+        </div>
+   
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+
+              <p class="h5">BRANCH: Serowe Branch</p>
+              <p class="h5">CASHIER CODE: JDOE - CASHIER NAME: Jane Doe</p>
+              <p class="h5">RECEIPT DATE: 21-Jun-18</p>
+
+              <hr>
+
+              <p class="h5">STATUS: U</p>
+              
+              <br>
+
+              <!-- Daily Receipts / Debit Listing -->
+              <table class="table table-borderless">
+                <thead class="thead-light">
+                  <tr>
+                    <th>RECEIPT NUMBER</th>
+                    <th>DRAWEE</th>
+                    <th>REFERENCE NUMBER</th>
+                    <th>REFERENCE DATE</th>
+                    <th>PAYEE/RECEIPT TYPE</th>
+                    <th>AMOUNT (Pula)</th>
+                  </tr>
+                </thead>
+                
+                <tbody *ngFor = "let receipt of groupies | keyvalue" >
+
+                  <tr>
+                      <td>{{receipt.key}}</td>
+                      <td>{{receipt.value[0].drawee}}</td>
+                      <td>{{receipt.value[0].reference_number}}</td>
+                      <td>{{receipt.value[0].reference_date}}</td>
+                      <td>{{receipt.value[0].pay_method_code}}</td>
+                      <td class="text-right">{{receipt.value[0].rec_allocated_amount}}</td>                    
+                  </tr>
+
+                    <tr *ngFor="let app of getApps(receipt.value) | keyvalue">
+                      <td colspan="6">
+                        <table class="h-100 w-100 table-sm table-hover">
+                          <thead class="thead-light">
+
+                            <tr><td colspan="6">Application: {{app.key}} </td></tr>
+                            <tr *ngIf="app.key=='SUNDRY RECEIPTS'"> <!-- application = Sundry Receipts -->
+                              <th colspan="5">Transaction Type</th><th>Amount</th>
+                            </tr>
+
+                            <tr *ngIf="app.key=='policy'"> <!-- TODO: change search string to uppercase when getting data from DB -->
+                              <th>Transaction Type</th> <th>Policy No.</th> <th colspan="2">Payer</th> <th>Period</th> <th>Amount</th>
+                            </tr>
+                      
+                            <tr *ngIf="app.key=='GROUP LIFE SYSTEM'"> <!-- application = Group Life System -->
+                              <th colspan="2">Transaction Type</th> <th>Pay Point ID</th> <th colspan="2">Pay Point Name</th> <th>Amount</th>
+                            </tr>
+                              
+                          </thead>
+                          <tbody>
+                            
+                            <tr *ngFor="let item of getPolicies(app.key, app.value) | keyvalue; let i = index">
+                              <td colspan="2" *ngIf="app.key=='GROUP LIFE SYSTEM'">{{app.value[i].app_activity_desc}}</td>
+                              <td *ngIf="app.key=='GROUP LIFE SYSTEM'">{{app.value[i].paypoint_id}}</td> 
+                              <td colspan="2" *ngIf="app.key=='GROUP LIFE SYSTEM'">{{app.value[i].paypoint_name}}</td> 
+                              <td *ngIf="app.key=='GROUP LIFE SYSTEM'" class="text-right">{{app.value[i].act_allocated_amount}}</td>
+
+                              <td *ngIf="app.key=='policy'">{{app.value[i].app_activity_desc}}</td>
+                              <td *ngIf="app.key=='policy'">{{app.value[i].policy_code}}</td> 
+                              <td *ngIf="app.key=='policy'" colspan="2">{{app.value[i].received_from}}</td> 
+                              <td *ngIf="app.key=='policy'">{{app.value[i].period}}</td> 
+                              <td *ngIf="app.key=='policy'" class="text-right">{{app.value[i].act_allocated_amount}}</td>
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+
+                  </tbody>
+              </table>
+
+              <br>
+              <p class="h6 text-right">Total by Payment Methood: {{totalPayment}}</p>
+              <p class="h6 text-right">Total by Posting Status: {{totalStatus}}</p>
+              <br>
+              <p class="h6 text-right">Grand Total: {{totalGrand}}</p>
+
+              <div *ngIf="printPreview">
+
+                <hr>
+                <p class="h6">Supervisor's Signature: _______________</p><br>
+                <p class="h6">Cashier's Signature: _________________</p>
+                <hr>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row text-center btn-toolbar">
+            <div class= "col-lg-12">
+              <div class="btn-group mr-2">
+                <button type="button" class="btn btn-md btn-primary" (click)="togglePrintPreview()">Print</button>
+              </div>
+
+              <div class="btn-group mr-2">
+                  <button type="button" class="btn btn-md btn-primary" (click)="toggleDisplayReport()">Exit</button>
+                </div>
+            </div>
+          </div> 
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
